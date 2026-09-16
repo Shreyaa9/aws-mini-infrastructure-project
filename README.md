@@ -75,6 +75,8 @@ CloudWatch
 SNS
  |
  +--> Email Notification
+```
+
 ## AWS Services Used
 
 ### 1. Amazon VPC
