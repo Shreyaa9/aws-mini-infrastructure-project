@@ -75,80 +75,133 @@ CloudWatch
 SNS
  |
  +--> Email Notification
-AWS Services Used
-1. Amazon VPC
+## AWS Services Used
+
+### 1. Amazon VPC
+
 Created a dedicated VPC:
-- Name: Project6-VPC
-- CIDR: 10.0.0.0/16
+
+- **Name:** `Project6-VPC`
+- **CIDR:** `10.0.0.0/16`
+
 The VPC provides the network environment for the project.
-2. Internet Gateway
-Created and attached:
-- Name: Project6-IGW
+
+### 2. Internet Gateway
+
+Created and attached an Internet Gateway:
+
+- **Name:** `Project6-IGW`
+
 It provides internet connectivity for the public subnet through the configured route.
-3. Public Subnet
+
+### 3. Public Subnet
+
 Created inside the VPC:
-- Name: Project6-Public-Subnet
-- CIDR: 10.0.1.0/24
+
+- **Name:** `Project6-Public-Subnet`
+- **CIDR:** `10.0.1.0/24`
+
 The subnet was explicitly associated with the public route table.
-4. Route Table
-Created:
-- Name: Project6-Public-RT
-Route configured:
-Destination: 0.0.0.0/0
-Target: Project6-IGW
-5. Security Group
-Created:
-- Name: Project6-EC2-SG
+
+### 4. Route Table
+
+Created a dedicated route table:
+
+- **Name:** `Project6-Public-RT`
+
+Configured route:
+
+- **Destination:** `0.0.0.0/0`
+- **Target:** `Project6-IGW`
+
+### 5. Security Group
+
+Created a security group for the EC2 instance:
+
+- **Name:** `Project6-EC2-SG`
+
 Inbound access:
-SSH - Port 22 - My IP
+
+- **SSH:** Port `22` → **My IP**
+
 Default outbound access was retained.
-6. Amazon EC2
-Created:
-- Name: Project6-EC2
-- OS: Ubuntu
-- Instance type: t3.micro
-- Public IP: Enabled
-- Subnet: Project6-Public-Subnet
-- Security Group: Project6-EC2-SG
+
+### 6. Amazon EC2
+
+Created an EC2 instance:
+
+- **Name:** `Project6-EC2`
+- **OS:** Ubuntu
+- **Instance Type:** `t3.micro`
+- **Public IP:** Enabled
+- **Subnet:** `Project6-Public-Subnet`
+- **Security Group:** `Project6-EC2-SG`
+
 The EC2 instance acts as the compute/server layer.
-7. Amazon S3
+
+### 7. Amazon S3
+
 Created an S3 bucket for object storage.
+
 Configuration:
-- Block Public Access: Enabled
-- ACLs: Disabled / Bucket owner enforced
-- Sample object uploaded: project6-sample.txt
+
+- **Block Public Access:** Enabled
+- **ACLs:** Disabled / Bucket owner enforced
+- **Sample Object:** `project6-sample.txt`
+
 The S3 bucket was kept private.
-8. IAM
-Created IAM user:
-Project6-User
-Permission configured:
-AmazonS3ReadOnlyAccess
+
+### 8. IAM
+
+Created an IAM user:
+
+- **Username:** `Project6-User`
+- **Permission:** `AmazonS3ReadOnlyAccess`
+
 The project uses controlled permissions instead of unrestricted administrator access.
-9. Amazon CloudWatch
+
+### 9. Amazon CloudWatch
+
 Configured CloudWatch monitoring for the EC2 instance.
+
 Alarm configuration:
-Metric: CPUUtilization
-Statistic: Average
-Period: 5 minutes
-Threshold: Greater than 70%
-Datapoints: 1 out of 1
-Alarm name:
-Project6-EC2-CPU-Above-70
-10. Amazon SNS
+
+- **Metric:** `CPUUtilization`
+- **Statistic:** `Average`
+- **Period:** `5 minutes`
+- **Threshold:** Greater than `70%`
+- **Datapoints:** `1 out of 1`
+- **Alarm Name:** `Project6-EC2-CPU-Above-70`
+
+### 10. Amazon SNS
+
 Configured an SNS topic for CloudWatch notifications:
-project6-cloudwatch-alert
+
+- **Topic:** `project6-cloudwatch-alert`
+- **Notification:** Email
+
 An email notification was configured for the CloudWatch alarm.
-Security Considerations
+
+## Security Considerations
+
 The following security practices were implemented:
+
 - EC2 was deployed inside a dedicated VPC.
-- SSH access was restricted to My IP.
+- SSH access was restricted to **My IP**.
 - S3 public access was blocked.
 - IAM permissions were limited to the required access.
 - AWS resources were configured manually with controlled network access.
-Verification
+
+## Verification
+
 The EC2 instance was successfully connected through SSH.
+
 Internet connectivity was verified using:
+
+```bash
 curl -I https://aws.amazon.com
+
+
 The response returned:
 HTTP/2 200
 This verified that the EC2 instance had working internet connectivity through the configured VPC networking.
